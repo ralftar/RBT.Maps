@@ -1,3 +1,9 @@
+<!--
+  "THE BEER-WARE LICENSE" (Revision 42):
+  Ralf Bjarne Taraldset wrote this file. As long as you retain this notice
+  you can do whatever you want with this stuff. If we meet some day, and
+  you think this stuff is worth it, you can buy me a beer in return.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +42,6 @@
       "price": "0",
       "priceCurrency": "USD"
     },
-    "license": "https://spdx.org/licenses/Beerware.html",
     "creator": {
       "@type": "Organization",
       "name": "rbt.no",
@@ -52,9 +57,7 @@
       --surface: #191919;
       --border: #282828;
       --text: #e0e0e0;
-      --muted: #787878;
-      --accent2: #989898;
-      --glow: rgba(224, 224, 224, 0.06);
+      --muted: #a0a0a0;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,7 +70,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow-x: hidden;
     }
 
     .container {
@@ -83,9 +85,14 @@
       margin-bottom: 0.5rem;
     }
 
+    .logo .map {
+      color: #2d8a4e;
+      font-weight: 900;
+    }
+
     .logo span {
-      color: var(--muted);
-      font-weight: 300;
+      color: #ffffff;
+      font-weight: 400;
     }
 
     .tagline {
@@ -153,30 +160,11 @@
       word-break: break-all;
       position: relative;
       cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .url-box:hover {
-      border-color: var(--text);
-      box-shadow: 0 0 0 3px var(--glow);
     }
 
     .url-box .domain { color: var(--muted); }
     .url-box .param { color: var(--text); }
-    .url-box .value { color: var(--accent2); }
-
-    .url-box .copy-hint {
-      position: absolute;
-      right: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: 0.7rem;
-      color: var(--muted);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .url-box:hover .copy-hint { opacity: 1; }
+    .url-box .value { color: var(--muted); }
 
     .platforms {
       display: grid;
@@ -226,30 +214,28 @@
       font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.85rem;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .try-form input:focus {
       border-color: var(--text);
-      box-shadow: 0 0 0 3px var(--glow);
     }
 
     .try-form input::placeholder { color: var(--muted); opacity: 0.6; }
 
     .try-form button {
-      background: var(--text);
+      background: #2d8a4e;
       border: none;
       border-radius: 9px;
       padding: 0.7rem 1.25rem;
-      color: var(--bg);
+      color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
       white-space: nowrap;
-      transition: opacity 0.2s;
     }
 
+    .try-form button { transition: opacity 150ms; }
     .try-form button:hover { opacity: 0.85; }
 
     .footer {
@@ -257,12 +243,12 @@
       padding: 1rem 0 2rem;
       text-align: center;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       font-weight: 300;
     }
 
     .footer a {
-      color: var(--muted);
+      color: #e0e0e0;
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -316,8 +302,8 @@
 
   <!-- LANDING PAGE (no ?q=) -->
   <div class="container" id="landing">
-    <h1 class="logo">map<span>.rbt.no</span></h1>
-    <p class="tagline">One link that opens maps — on any device.</p>
+    <h1 class="logo"><span class="map">map</span><span>.rbt.no</span></h1>
+    <p class="tagline">One link that opens the maps app — on any device.</p>
 
     <div class="card">
       <h2>The problem</h2>
@@ -334,7 +320,6 @@
       <p>One link. Every platform. Just add <strong>?q=</strong> with a place name.</p>
       <div class="url-box" onclick="copyUrl(this)" role="button" tabindex="0">
         <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Eiffel+Tower,+Paris</span>
-        <span class="copy-hint">click to copy</span>
       </div>
     </div>
 
@@ -360,8 +345,9 @@
     </div>
 
     <div class="footer">
-      No cookies — only essential technicalities and anonymized visitor stats.<br />
-      By the courtesy of <a href="https://rbt.no">rbt.no</a>. <a href="https://spdx.org/licenses/Beerware.html">License</a>.
+      No cookies — only essential technicalities and anonymized visitor stats.
+      <br /><br />
+      Brought to you by the courtesy of <a href="https://rbt.no">rbt.no</a>.
     </div>
   </div>
 
@@ -384,15 +370,15 @@
       const u = navigator.userAgent.toLowerCase();
 
       // Platform detection
-      constisAndroid = /android/.test(u);
-      constisIOS = /iphone|ipad|ipod/.test(u);
-      constisMac = !isIOS && /macintosh|mac os x/.test(u);
-      constisInApp = /fbav|instagram|snapchat|tiktok|linkedin|twitter|line\/|wechat|micromessenger/.test(u);
+      const isAndroid = /android/.test(u);
+      const isIOS = /iphone|ipad|ipod/.test(u);
+      const isMac = !isIOS && /macintosh|mac os x/.test(u);
+      const isInApp = /fbav|instagram|snapchat|tiktok|linkedin|twitter|line\/|wechat|micromessenger/.test(u);
 
       // Redirect targets
-      constgeoIntent = 'geo:0,0?q=' + encoded;
-      constappleMaps = 'https://maps.apple.com/?q=' + encoded;
-      constgoogleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
+      const geoIntent = 'geo:0,0?q=' + encoded;
+      const appleMaps = 'https://maps.apple.com/?q=' + encoded;
+      const googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
 
       // --- Redirect logic ---
       //
@@ -436,17 +422,8 @@
       window.open('?q=' + encodeURIComponent(val), '_blank');
     }
 
-    function copyUrl(el) {
-      const text = 'https://map.rbt.no/?q=Eiffel+Tower,+Paris';
-      navigator.clipboard.writeText(text).then(() => {
-        const hint = el.querySelector('.copy-hint');
-        hint.textContent = 'copied!';
-        hint.style.opacity = '1';
-        setTimeout(() => {
-          hint.textContent = 'click to copy';
-          hint.style.opacity = '';
-        }, 1500);
-      });
+    function copyUrl() {
+      navigator.clipboard.writeText('https://map.rbt.no/?q=Eiffel+Tower,+Paris');
     }
   </script>
 </body>
