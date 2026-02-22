@@ -46,9 +46,6 @@
   </script>
 
   <script defer src="https://umami.rbt.no/script.js" data-website-id="e642a37c-99cd-4dd3-bbd3-f32f6c6acc6c"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #101010;
@@ -63,7 +60,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -150,7 +147,7 @@
       border-radius: 9px;
       padding: 0.85rem 1rem;
       margin-top: 1rem;
-      font-family: 'DM Mono', monospace;
+      font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.82rem;
       color: var(--text);
       word-break: break-all;
@@ -173,7 +170,7 @@
       right: 0.75rem;
       top: 50%;
       transform: translateY(-50%);
-      font-family: 'Outfit', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-size: 0.7rem;
       color: var(--muted);
       opacity: 0;
@@ -226,7 +223,7 @@
       border-radius: 9px;
       padding: 0.7rem 1rem;
       color: var(--text);
-      font-family: 'DM Mono', monospace;
+      font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.85rem;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -245,7 +242,7 @@
       border-radius: 9px;
       padding: 0.7rem 1.25rem;
       color: var(--bg);
-      font-family: 'Outfit', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
@@ -387,15 +384,15 @@
       const u = navigator.userAgent.toLowerCase();
 
       // Platform detection
-      var isAndroid = /android/.test(u);
-      var isIOS = /iphone|ipad|ipod/.test(u);
-      var isMac = !isIOS && /macintosh|mac os x/.test(u);
-      var isInApp = /fbav|instagram|snapchat|tiktok|linkedin|twitter|line\/|wechat|micromessenger/.test(u);
+      constisAndroid = /android/.test(u);
+      constisIOS = /iphone|ipad|ipod/.test(u);
+      constisMac = !isIOS && /macintosh|mac os x/.test(u);
+      constisInApp = /fbav|instagram|snapchat|tiktok|linkedin|twitter|line\/|wechat|micromessenger/.test(u);
 
       // Redirect targets
-      var geoIntent = 'geo:0,0?q=' + encoded;
-      var appleMaps = 'https://maps.apple.com/?q=' + encoded;
-      var googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
+      constgeoIntent = 'geo:0,0?q=' + encoded;
+      constappleMaps = 'https://maps.apple.com/?q=' + encoded;
+      constgoogleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
 
       // --- Redirect logic ---
       //
@@ -411,10 +408,8 @@
       //   Strategy: attempt the redirect anyway — universal links (maps.apple.com) and
       //   geo: intents often succeed even inside webviews because the OS intercepts
       //   them at a layer below the browser. If the redirect works, the page navigates
-      //   away and the user never sees the fallback. If the webview blocks it, we're
-      //   still on this page after 2 seconds, so we swap the spinner for a visual hint
-      //   telling the user to open in their real browser (⋮ / share → browser icon).
-      //   This "try first, fallback second" approach maximizes native opens.
+      //   away. If the webview blocks it, we're still on this page after 2 seconds,
+      //   so we fall back to Google Maps web which works in any webview.
 
       document.getElementById('redirecting').classList.add('show');
 
