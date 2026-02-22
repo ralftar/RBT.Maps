@@ -56,7 +56,6 @@
       --border: #282828;
       --text: #e0e0e0;
       --muted: #787878;
-      --accent: #e0e0e0;
       --accent2: #989898;
       --glow: rgba(224, 224, 224, 0.06);
     }
@@ -111,7 +110,7 @@
       font-size: 1rem;
       font-weight: 500;
       margin-bottom: 0.75rem;
-      color: var(--accent);
+      color: var(--text);
       letter-spacing: 0.02em;
     }
 
@@ -161,12 +160,12 @@
     }
 
     .url-box:hover {
-      border-color: var(--accent);
+      border-color: var(--text);
       box-shadow: 0 0 0 3px var(--glow);
     }
 
     .url-box .domain { color: var(--muted); }
-    .url-box .param { color: var(--accent); }
+    .url-box .param { color: var(--text); }
     .url-box .value { color: var(--accent2); }
 
     .url-box .copy-hint {
@@ -210,8 +209,9 @@
 
     .platform:nth-child(1) .dot { background: #a4c639; }
     .platform:nth-child(2) .dot { background: #a2aaad; }
-    .platform:nth-child(3) .dot { background: #7baaf7; }
-    .platform:nth-child(4) .dot { background: #e0915a; }
+    .platform:nth-child(3) .dot { background: #a2aaad; }
+    .platform:nth-child(4) .dot { background: #7baaf7; }
+    .platform:nth-child(5) .dot { background: #e0915a; }
 
     .try-form {
       display: flex;
@@ -233,14 +233,14 @@
     }
 
     .try-form input:focus {
-      border-color: var(--accent);
+      border-color: var(--text);
       box-shadow: 0 0 0 3px var(--glow);
     }
 
     .try-form input::placeholder { color: var(--muted); opacity: 0.6; }
 
     .try-form button {
-      background: var(--accent);
+      background: var(--text);
       border: none;
       border-radius: 9px;
       padding: 0.7rem 1.25rem;
@@ -288,24 +288,6 @@
       animation: spin 0.7s linear infinite;
     }
 
-    .fallback {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 1.5rem;
-      min-height: 100vh;
-    }
-
-    .fallback.show { display: flex; }
-
-    .fallback-icon { font-size: 2.5rem; }
-
-    .fallback-steps {
-      font-size: 1.5rem;
-      color: var(--muted);
-      letter-spacing: 0.3em;
-    }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -361,14 +343,13 @@
 
     <div class="card">
       <h2>How it works</h2>
-      <p>
-        The link detects the visitor's platform and redirects accordingly. No tracking, no cookies, no JavaScript frameworks — just a single lightweight HTML file.
-      </p>
+      <p>The link detects the visitor's platform and opens the right maps app.</p>
       <div class="platforms">
-        <div class="platform"><span class="dot"></span> Android → geo: intent</div>
-        <div class="platform"><span class="dot"></span> iOS → Apple Maps / Google Maps</div>
-        <div class="platform"><span class="dot"></span> Desktop → Google Maps web</div>
-        <div class="platform"><span class="dot"></span> In-app → open in browser hint</div>
+        <div class="platform"><span class="dot"></span> Android → native maps app</div>
+        <div class="platform"><span class="dot"></span> iOS → Apple Maps</div>
+        <div class="platform"><span class="dot"></span> macOS → Apple Maps</div>
+        <div class="platform"><span class="dot"></span> Windows / Linux → Google Maps web</div>
+        <div class="platform"><span class="dot"></span> In-app → tries native, falls back to Google Maps web</div>
       </div>
     </div>
 
@@ -392,13 +373,6 @@
     <div class="spinner"></div>
   </div>
 
-  <!-- IN-APP BROWSER FALLBACK (Instagram, Facebook, Snapchat etc.) -->
-  <div class="fallback" id="fallback">
-    <div class="fallback-icon">&#x1F517;</div>
-    <div class="fallback-steps">
-      <span>&#x22EE;</span> / <span>&#x2197;&#xFE0F;</span> &rarr; <span>&#x1F310;</span>
-    </div>
-  </div>
 
   <script>
     (function () {
@@ -412,47 +386,52 @@
       const encoded = encodeURIComponent(q);
       const u = navigator.userAgent.toLowerCase();
 
-      const isInAppBrowser = () => {
-        return (
-          /fbav|instagram|snapchat/.test(u) &&
-          !/crios|fxios|safari/.test(u)
-        );
-      };
+      // Platform detection
+      var isAndroid = /android/.test(u);
+      var isIOS = /iphone|ipad|ipod/.test(u);
+      var isMac = !isIOS && /macintosh|mac os x/.test(u);
+      var isInApp = /fbav|instagram|snapchat|tiktok|linkedin|twitter|line\/|wechat|micromessenger/.test(u);
 
-      if (isInAppBrowser()) {
-        document.getElementById('fallback').classList.add('show');
-        return;
-      }
+      // Redirect targets
+      var geoIntent = 'geo:0,0?q=' + encoded;
+      var appleMaps = 'https://maps.apple.com/?q=' + encoded;
+      var googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encoded;
+
+      // --- Redirect logic ---
+      //
+      // Priority: open natively wherever possible.
+      //
+      // Android:         geo: intent → opens default maps app (Google Maps, Waze, etc.)
+      // iOS:             maps.apple.com → iOS intercepts universal link, opens Apple Maps natively. Instant.
+      // macOS:           maps.apple.com → macOS intercepts universal link, opens Apple Maps natively.
+      // Other (Win/Linux): Google Maps web — no native maps app to target.
+      //
+      // In-app browsers (Facebook, Instagram, TikTok, Snapchat, LinkedIn, Twitter/X, LINE, WeChat):
+      //   These embed a webview that may block navigation to external apps.
+      //   Strategy: attempt the redirect anyway — universal links (maps.apple.com) and
+      //   geo: intents often succeed even inside webviews because the OS intercepts
+      //   them at a layer below the browser. If the redirect works, the page navigates
+      //   away and the user never sees the fallback. If the webview blocks it, we're
+      //   still on this page after 2 seconds, so we swap the spinner for a visual hint
+      //   telling the user to open in their real browser (⋮ / share → browser icon).
+      //   This "try first, fallback second" approach maximizes native opens.
 
       document.getElementById('redirecting').classList.add('show');
 
-      const tryDeepLink = (url, fallbackUrl) => {
-        let hidden = false;
-        const onVis = () => { if (document.hidden) hidden = true; };
-        document.addEventListener('visibilitychange', onVis);
-
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = url;
-        document.body.appendChild(iframe);
-
-        setTimeout(() => {
-          document.removeEventListener('visibilitychange', onVis);
-          if (!hidden) location.replace(fallbackUrl);
-        }, 1200);
-      };
-
-      if (/android/.test(u)) {
-        location.replace('geo:0,0?q=' + encoded);
-      } else if (/iphone|ipad|ipod/.test(u)) {
-        tryDeepLink(
-          'comgooglemaps://?q=' + encoded,
-          'http://maps.apple.com/?q=' + encoded
-        );
+      if (isAndroid) {
+        location.replace(geoIntent);
+      } else if (isIOS || isMac) {
+        location.replace(appleMaps);
       } else {
-        location.replace(
-          'https://www.google.com/maps/search/?api=1&query=' + encoded
-        );
+        location.replace(googleMaps);
+      }
+
+      // If we're still here after 2s (in-app browser blocked the native redirect),
+      // fall back to Google Maps web — works in any webview.
+      if (isInApp) {
+        setTimeout(function () {
+          location.replace(googleMaps);
+        }, 2000);
       }
     })();
 
