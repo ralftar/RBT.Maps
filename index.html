@@ -1,1 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>map.rbt.no — open any place in your maps app</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: #151921;
+      --border: #252b38;
+      --text: #e4e8f1;
+      --muted: #6b7a94;
+      --accent: #4fc3f7;
+      --accent2: #81c784;
+      --glow: rgba(79, 195, 247, 0.08);
+    }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      width: 100%;
+      padding: 3rem 1.5rem 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-text span {
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.6s 0.1s ease both;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.25s; }
+    .card:nth-child(5) { animation-delay: 0.35s; }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-weight: 300;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .url-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 0.85rem 1rem;
+      margin-top: 1rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--text);
+      word-break: break-all;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .url-box:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .url-box .domain { color: var(--muted); }
+    .url-box .param { color: var(--accent); }
+    .url-box .value { color: var(--accent2); }
+
+    .url-box .copy-hint {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .url-box:hover .copy-hint { opacity: 1; }
+
+    .platforms {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .platform {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .platform .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .platform:nth-child(1) .dot { background: var(--accent); }
+    .platform:nth-child(2) .dot { background: var(--accent2); }
+    .platform:nth-child(3) .dot { background: #ffb74d; }
+    .platform:nth-child(4) .dot { background: #ce93d8; }
+
+    .try-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .try-form input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 0.7rem 1rem;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .try-form input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .try-form input::placeholder { color: var(--muted); opacity: 0.6; }
+
+    .try-form button {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 9px;
+      padding: 0.7rem 1.25rem;
+      color: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .try-form button:hover { opacity: 0.85; }
+
+    .footer {
+      margin-top: 1rem;
+      padding: 1rem 0 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 300;
+      animation: fadeUp 0.5s 0.45s ease both;
+    }
+
+    .footer a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .redirect-notice {
+      display: none;
+      text-align: center;
+      padding: 6rem 1.5rem;
+    }
+
+    .redirect-notice.show { display: block; }
+
+    .redirect-notice h1 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .redirect-notice p {
+      color: var(--muted);
+      font-weight: 300;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .redirect-notice .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    .fallback {
+      display: none;
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+
+    .fallback.show { display: block; }
+
+    .fallback h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .fallback p {
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .platforms { grid-template-columns: 1fr; }
+      .try-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANDING PAGE (no ?q=) -->
+  <div class="container" id="landing">
+    <div class="logo">
+      <div class="logo-icon">⌖</div>
+      <div class="logo-text">map<span>.rbt.no</span></div>
+    </div>
+    <p class="tagline">One link that opens maps — on any device.</p>
+
+    <div class="card">
+      <h2>What is this?</h2>
+      <p>
+        map.rbt.no is a tiny redirect service. Add a <strong>?q=</strong> parameter with any place name or address, and it will open the right maps app on the visitor's device — Google Maps, Apple Maps, or the web.
+      </p>
+      <div class="url-box" onclick="copyUrl(this)" role="button" tabindex="0">
+        <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Eiffel+Tower,+Paris</span>
+        <span class="copy-hint">click to copy</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How it works</h2>
+      <p>
+        The link detects the visitor's platform and redirects accordingly. No tracking, no cookies, no JavaScript frameworks — just a single lightweight HTML file.
+      </p>
+      <div class="platforms">
+        <div class="platform"><span class="dot"></span> Android → geo: intent</div>
+        <div class="platform"><span class="dot"></span> iOS → Apple Maps / Google Maps</div>
+        <div class="platform"><span class="dot"></span> Desktop → Google Maps web</div>
+        <div class="platform"><span class="dot"></span> In-app → open in browser hint</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Try it</h2>
+      <p>Enter a place name or address and hit go.</p>
+      <form class="try-form" onsubmit="tryNav(event)">
+        <input type="text" id="tryInput" placeholder="Stryn, Norway" autocomplete="off" />
+        <button type="submit">Open →</button>
+      </form>
+    </div>
+
+    <div class="footer">
+      A micro-tool by <a href="https://rbt.no">rbt.no</a>
+    </div>
+  </div>
+
+  <!-- REDIRECT STATE (has ?q=) -->
+  <div class="redirect-notice" id="redirecting">
+    <div class="spinner"></div>
+    <h1>Opening maps…</h1>
+    <p id="redirect-query"></p>
+  </div>
+
+  <!-- IN-APP BROWSER FALLBACK (Instagram, Facebook, Snapchat etc.) -->
+  <div class="fallback" id="fallback">
+    <h2>Almost there!</h2>
+    <p>
+      This in-app browser can't open your maps app directly.<br /><br />
+      Tap <strong>⋮</strong> or the <strong>share</strong> button, then choose<br />
+      <strong>"Open in Safari"</strong> or <strong>"Open in Chrome"</strong><br />
+      and the map will open right up.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const q = params.get('q');
+
+      if (!q) return;
+
+      document.getElementById('landing').style.display = 'none';
+
+      const encoded = encodeURIComponent(q);
+      const u = navigator.userAgent.toLowerCase();
+
+      const isInAppBrowser = () => {
+        return (
+          /fbav|instagram|snapchat/.test(u) &&
+          !/crios|fxios|safari/.test(u)
+        );
+      };
+
+      if (isInAppBrowser()) {
+        document.getElementById('fallback').classList.add('show');
+        return;
+      }
+
+      const notice = document.getElementById('redirecting');
+      notice.classList.add('show');
+      document.getElementById('redirect-query').textContent = q;
+
+      const tryDeepLink = (url, fallbackUrl) => {
+        let hidden = false;
+        const onVis = () => { if (document.hidden) hidden = true; };
+        document.addEventListener('visibilitychange', onVis);
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+
+        setTimeout(() => {
+          document.removeEventListener('visibilitychange', onVis);
+          if (!hidden) location.replace(fallbackUrl);
+        }, 1200);
+      };
+
+      if (/android/.test(u)) {
+        location.replace('geo:0,0?q=' + encoded);
+      } else if (/iphone|ipad|ipod/.test(u)) {
+        tryDeepLink(
+          'comgooglemaps://?q=' + encoded,
+          'http://maps.apple.com/?q=' + encoded
+        );
+      } else {
+        location.replace(
+          'https://www.google.com/maps/search/?api=1&query=' + encoded
+        );
+      }
+    })();
+
+    function tryNav(e) {
+      e.preventDefault();
+      const val = document.getElementById('tryInput').value.trim();
+      if (val) {
+        location.href = '?q=' + encodeURIComponent(val);
+      }
+    }
+
+    function copyUrl(el) {
+      const text = 'https://map.rbt.no/?q=Eiffel+Tower,+Paris';
+      navigator.clipboard.writeText(text).then(() => {
+        const hint = el.querySelector('.copy-hint');
+        hint.textContent = 'copied!';
+        hint.style.opacity = '1';
+        setTimeout(() => {
+          hint.textContent = 'click to copy';
+          hint.style.opacity = '';
+        }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>
