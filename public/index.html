@@ -73,9 +73,9 @@
     }
 
     .container {
-      max-width: 640px;
+      max-width: 820px;
       width: 100%;
-      padding: 3rem 1.5rem 2rem;
+      padding: 3rem 2rem 2rem;
     }
 
     .logo {
@@ -125,28 +125,9 @@
       line-height: 1.6;
     }
 
-    .bullet-list {
-      list-style: none;
-      margin-top: 0.75rem;
-    }
+    .card p + p { margin-top: 0.75rem; }
 
-    .bullet-list li {
-      color: var(--muted);
-      font-weight: 300;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      padding-left: 1rem;
-      position: relative;
-    }
-
-    .bullet-list li + li { margin-top: 0.4rem; }
-
-    .bullet-list li::before {
-      content: '·';
-      position: absolute;
-      left: 0;
-      font-weight: 700;
-    }
+    .card p strong { color: var(--text); font-weight: 500; }
 
     .url-box {
       background: var(--bg);
@@ -209,9 +190,8 @@
 
     .platform:nth-child(1) .dot { background: #a4c639; }
     .platform:nth-child(2) .dot { background: #a2aaad; }
-    .platform:nth-child(3) .dot { background: #a2aaad; }
-    .platform:nth-child(4) .dot { background: #7baaf7; }
-    .platform:nth-child(5) .dot { background: #e0915a; }
+    .platform:nth-child(3) .dot { background: #7baaf7; }
+    .platform:nth-child(4) .dot { background: #e0915a; }
 
     .try-form {
       display: flex;
@@ -308,6 +288,7 @@
     }
 
     @media (max-width: 480px) {
+      .container { padding: 2rem 1.25rem 1.5rem; }
       .platforms { grid-template-columns: 1fr; }
       .try-form { flex-direction: column; }
     }
@@ -318,21 +299,11 @@
   <!-- LANDING PAGE (no ?q=) -->
   <div class="container" id="landing">
     <h1 class="logo"><span class="map">map</span><span>.rbt.no</span></h1>
-    <p class="tagline">One link that opens the maps app, on any device.</p>
+    <p class="tagline">One link that opens the right maps app, on any device.</p>
 
     <div class="card">
-      <h2>The problem</h2>
-      <p>There is no universal way to open a map natively across devices.</p>
-      <ul class="bullet-list">
-        <li><strong>maps.apple.com</strong> used to work everywhere. Apple removed cross-platform support.</li>
-        <li><strong>maps.app.goo.gl</strong>, Google's short links. Shut down.</li>
-        <li>Android needs <strong>geo:</strong> intents, iOS needs deep links, desktop opens a browser.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>The fix</h2>
-      <p>One link. Every platform. Just add <strong>?q=</strong> with a place name and the rest is sorted.</p>
+      <p>There's no universal map link that brings up the native maps app. <strong>maps.apple.com</strong> used to work everywhere until Apple removed cross-platform support. Google's <strong>maps.app.goo.gl</strong> short links were shut down. Android needs <strong>geo:</strong> intents, iOS wants deep links, desktop just opens a browser.</p>
+      <p>This is a redirect that solves that. Add <strong>?q=</strong> with a place name:</p>
       <div class="url-box">
         <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Eiffel+Tower,+Paris</span>
         <button class="copy-btn" onclick="copyUrl(this)">Copy</button>
@@ -343,32 +314,25 @@
       <h2>How it works</h2>
       <p>The link detects the visitor's platform and opens the right maps app.</p>
       <div class="platforms">
-        <div class="platform"><span class="dot"></span> Android → native maps app</div>
-        <div class="platform"><span class="dot"></span> iOS → Apple Maps</div>
-        <div class="platform"><span class="dot"></span> macOS → Apple Maps</div>
-        <div class="platform"><span class="dot"></span> Windows / Linux → Google Maps web</div>
-        <div class="platform"><span class="dot"></span> In-app → tries native, falls back to Google Maps web</div>
+        <div class="platform"><span class="dot"></span> Android — native maps app</div>
+        <div class="platform"><span class="dot"></span> iOS / macOS — Apple Maps</div>
+        <div class="platform"><span class="dot"></span> Windows / Linux — Google Maps web</div>
+        <div class="platform"><span class="dot"></span> In-app — tries native, falls back to web</div>
       </div>
     </div>
 
     <div class="card">
       <h2>Try it</h2>
-      <p>Enter a place name or address and hit go.</p>
       <form class="try-form" onsubmit="tryNav(event)">
         <input type="text" id="tryInput" placeholder="Eiffel Tower, Paris" autocomplete="off" />
-        <button type="submit">Open →</button>
+        <button type="submit">Open</button>
       </form>
     </div>
 
-    <div class="card">
-      <h2>Use it</h2>
-      <p>Free to use anywhere a map link needs to open natively. No sign-up, no API key and built to stay running.</p>
-    </div>
-
     <div class="footer">
-      No cookies, only essential technicalities and anonymized visitor stats.
+      Free, no sign-up, no API key. No cookies, only anonymized visitor stats.
       <br /><br />
-      Brought to you by the courtesy of <a href="https://rbt.no">rbt.no</a>.
+      By the courtesy of <a href="https://rbt.no">rbt.no</a>.
     </div>
   </div>
 
