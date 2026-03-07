@@ -16,17 +16,22 @@
   <meta name="description" content="Universal map redirect service. One URL that opens Google Maps, Apple Maps, or the native maps app on any device. Cross-platform map link for Android, iOS, macOS, and desktop. Free, open, no API key. Replaces maps.apple.com and maps.app.goo.gl." />
   <meta name="keywords" content="universal map link, cross-platform map redirect, open maps app, open map link natively, Google Maps redirect, Apple Maps link, geo intent, map URL redirect, maps.apple.com alternative, maps.app.goo.gl replacement, map deep link, native map link, map redirect service, open maps from website" />
   <link rel="canonical" href="https://map.rbt.no/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="map.rbt.no | universal map link for every device" />
-  <meta property="og:description" content="Universal map redirect. One URL that opens the native maps app on Android, iOS, macOS, or Google Maps on desktop. Free, no API key. Replaces maps.apple.com and maps.app.goo.gl." />
+  <meta property="og:description" content="Universal map redirect. One URL that opens the native maps app on Android, iOS, macOS, or Google Maps on desktop. Free, no API key." />
   <meta property="og:url" content="https://map.rbt.no/" />
+  <meta property="og:image" content="https://map.rbt.no/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="map.rbt.no | universal map link for every device" />
-  <meta name="twitter:description" content="Universal map redirect. One URL that opens the native maps app on any device. Free, no API key. Replaces maps.apple.com and maps.app.goo.gl." />
+  <meta name="twitter:description" content="Universal map redirect. One URL that opens the native maps app on any device. Free, no API key." />
+  <meta name="twitter:image" content="https://map.rbt.no/og.png" />
 
   <script type="application/ld+json">
   {
@@ -60,6 +65,16 @@
       --muted: #a0a0a0;
     }
 
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --surface: #f5f5f5;
+        --border: #e0e0e0;
+        --text: #1a1a1a;
+        --muted: #666666;
+      }
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -91,7 +106,7 @@
     }
 
     .logo span {
-      color: #ffffff;
+      color: var(--text);
       font-weight: 400;
     }
 
@@ -228,9 +243,9 @@
       font-size: 0.85rem;
       cursor: pointer;
       white-space: nowrap;
+      transition: opacity 150ms;
     }
 
-    .try-form button { transition: opacity 150ms; }
     .try-form button:hover { opacity: 0.85; }
 
     .footer {
@@ -243,7 +258,7 @@
     }
 
     .footer a {
-      color: #e0e0e0;
+      color: var(--text);
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -253,6 +268,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      background: var(--bg);
     }
 
     .redirect-notice.show { display: flex; }
@@ -266,35 +282,21 @@
       animation: spin 0.7s linear infinite;
     }
 
-
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    @media (prefers-color-scheme: light) {
-      .redirect-notice {
-        background: #ffffff;
-      }
-      .redirect-notice .spinner {
-        border-color: #e0e0e0;
-        border-top-color: #989898;
-      }
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .redirect-notice {
-        background: #101010;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container { padding: 2rem 1.25rem 1.5rem; }
+    @media (max-width: 640px) {
+      .container { padding-left: 0; padding-right: 0; }
+      .logo, .tagline { padding-left: 1.75rem; }
+      .card { border-radius: 0; border-left: none; border-right: none; }
       .platforms { grid-template-columns: 1fr; }
       .try-form { flex-direction: column; }
+      .footer { padding-left: 1.75rem; padding-right: 1.75rem; }
     }
   </style>
 </head>
-<body style="background:light-dark(#ffffff,#101010)">
+<body>
 
   <!-- LANDING PAGE (no ?q=) -->
   <div class="container" id="landing">
@@ -302,8 +304,18 @@
     <p class="tagline">One link that opens the right maps app, on any device.</p>
 
     <div class="card">
-      <p>There's no universal map link that brings up the native maps app. <strong>maps.apple.com</strong> used to work everywhere until Apple removed cross-platform support. Google's <strong>maps.app.goo.gl</strong> short links were shut down. Android needs <strong>geo:</strong> intents, iOS wants deep links, desktop just opens a browser.</p>
-      <p>This is a redirect that solves that. Add <strong>?q=</strong> with a place name:</p>
+      <h2>🤯 The problem</h2>
+      <p>There is no standard for opening a map location natively. Every platform does it differently.</p>
+      <ul class="bullet-list">
+        <li>Android uses <strong>geo:</strong> intents. iOS and macOS intercept <strong>Apple Maps</strong> links. Desktop has no native app at all.</li>
+        <li>Pick one format and every other platform breaks.</li>
+        <li>Building the detection into each project adds complexity. Often a plain link to copy or share is all that's needed.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>🔗 The fix</h2>
+      <p>A single URL that handles the detection. Add <strong>?q=</strong> with a place name, coordinates, or a search query — done.</p>
       <div class="url-box">
         <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Eiffel+Tower,+Paris</span>
         <button class="copy-btn" onclick="copyUrl(this)">Copy</button>
@@ -311,8 +323,8 @@
     </div>
 
     <div class="card">
-      <h2>How it works</h2>
-      <p>The link detects the visitor's platform and opens the right maps app.</p>
+      <h2>⚙️ How it works</h2>
+      <p>The platform is detected and the visitor is redirected to the native maps app.</p>
       <div class="platforms">
         <div class="platform"><span class="dot"></span> Android — native maps app</div>
         <div class="platform"><span class="dot"></span> iOS / macOS — Apple Maps</div>
@@ -322,11 +334,17 @@
     </div>
 
     <div class="card">
-      <h2>Try it</h2>
+      <h2>🧪 Try it</h2>
+      <p>Enter a place name or address and hit go.</p>
       <form class="try-form" onsubmit="tryNav(event)">
         <input type="text" id="tryInput" placeholder="Eiffel Tower, Paris" autocomplete="off" />
         <button type="submit">Open</button>
       </form>
+    </div>
+
+    <div class="card">
+      <h2>🚀 Use it</h2>
+      <p>Free to use anywhere. No sign-up, no API key. Open source under the <a href="https://github.com/ralftar/rbt.map" style="color:var(--text);text-decoration:underline;text-underline-offset:2px">Beer-ware license</a>.</p>
     </div>
 
     <div class="footer">
@@ -347,14 +365,17 @@
       const params = new URLSearchParams(location.search);
       const q = params.get('q');
 
-      if (!q) return;
+      if (!q || !q.trim()) return;
 
       document.getElementById('landing').style.display = 'none';
 
-      const encoded = encodeURIComponent(q);
+      const encoded = encodeURIComponent(q.trim());
       const u = navigator.userAgent.toLowerCase();
 
       // Platform detection
+      // Note: iPadOS 13+ reports "Macintosh" in the UA string,
+      // so iPads land in the isMac branch — correct, since Apple Maps
+      // is the right target for both macOS and iPadOS.
       const isAndroid = /android/.test(u);
       const isIOS = /iphone|ipad|ipod/.test(u);
       const isMac = !isIOS && /macintosh|mac os x/.test(u);
@@ -392,9 +413,10 @@
         location.replace(googleMaps);
       }
 
-      // If we're still here after 2s (in-app browser blocked the native redirect),
-      // fall back to Google Maps web -works in any webview.
-      if (isInApp) {
+      // If still here after 2s, fall back to Google Maps web.
+      // Covers: geo: intent failing on Android (no maps app installed),
+      // and in-app browsers blocking the native redirect.
+      if (isAndroid || isInApp) {
         setTimeout(function () {
           location.replace(googleMaps);
         }, 2000);
