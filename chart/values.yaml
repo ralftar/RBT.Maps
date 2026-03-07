@@ -1,6 +1,0 @@
-appname: replaced
-namespace: replaced
-image: replaced
-host: replaced
-pullsecret: replaced
-containerPort: 80

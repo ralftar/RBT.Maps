@@ -1,4 +1,4 @@
-# map.rbt.no
+# maps.rbt.no
 
 One link that opens the right maps app, on any device.
 
@@ -13,7 +13,7 @@ Building detection into each project adds complexity — often a plain link is a
 One URL that handles detection. Add `?q=` with a place, coordinates, or a query — done.
 
 ```
-https://map.rbt.no/?q=Hornindalsvatnet
+https://maps.rbt.no/?q=Hornindalsvatnet
 ```
 
 ### Platform behavior
@@ -28,9 +28,9 @@ https://map.rbt.no/?q=Hornindalsvatnet
 ### Examples
 
 ```
-https://map.rbt.no/?q=Hornindalsvatnet
-https://map.rbt.no/?q=59.9139,10.7522
-https://map.rbt.no/?q=pizza+oslo
+https://maps.rbt.no/?q=Hornindalsvatnet
+https://maps.rbt.no/?q=59.9139,10.7522
+https://maps.rbt.no/?q=pizza+oslo
 ```
 
 ## How it works
@@ -45,12 +45,9 @@ iPadOS 13+ reports as "Macintosh" in the user agent string and lands in the macO
 
 No cookies. No data stored. IP addresses are processed for the HTTP connection but not logged. Visitor stats are anonymized.
 
-## Self-hosting
+## Hosting
 
-```bash
-docker build -t rbt-map .
-docker run -p 8080:80 rbt-map
-```
+Deployed to GitHub Pages via [GitHub Actions](.github/workflows/publish.yaml). Custom domain configured via [CNAME](CNAME).
 
 ## License
 
