@@ -33,4 +33,4 @@ docker run -p 8080:80 rbt-map
 
 ## License
 
-[Beer-ware](https://en.wikipedia.org/wiki/Beerware) — see the source for details.
+[MIT](LICENSE)
