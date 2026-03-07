@@ -1,0 +1,67 @@
+on:
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  APP: rbt-map
+  NS: rbt-static
+  HOST: map.rbt.no
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip ci')
+    outputs:
+      v: ${{ steps.v.outputs.v }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: v
+        run: echo "v=0.0.${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+  chart:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: azure/setup-helm@v4
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+      - run: |
+          helm package chart --version ${{ needs.version.outputs.v }} --app-version ${{ needs.version.outputs.v }}
+          helm push ${{ env.APP }}-${{ needs.version.outputs.v }}.tgz oci://ghcr.io/ralftar/helm-charts
+
+  image:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: docker/setup-buildx-action@v3.12.0
+      - uses: docker/login-action@v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: docker build --tag ghcr.io/ralftar/${{ env.APP }}:${{ needs.version.outputs.v }} --tag ghcr.io/ralftar/${{ env.APP }}:latest .
+      - run: docker push --all-tags ghcr.io/ralftar/${{ env.APP }}
+
+  deploy:
+    needs: [version, chart, image]
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir -p ~/.kube && echo "${{ secrets.RBT_KUBECONFIG }}" > ~/.kube/config && chmod 600 ~/.kube/config
+      - uses: azure/setup-helm@v4
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+      - run: >
+          helm upgrade --install ${{ env.APP }}
+          oci://ghcr.io/ralftar/helm-charts/${{ env.APP }}
+          --version ${{ needs.version.outputs.v }}
+          --namespace ${{ env.NS }} --create-namespace
+          --set appname=${{ env.APP }},namespace=${{ env.NS }}
+          --set image=ghcr.io/ralftar/${{ env.APP }}:${{ needs.version.outputs.v }}
+          --set host=${{ env.HOST }}
+          --set pullsecret=${{ secrets.RBT_GH_PACKAGES_PULLSECRET }}
