@@ -6,11 +6,11 @@ One link that opens the right maps app, on any device.
 
 There is no standard for opening a map location natively. Android uses `geo:` intents, iOS and macOS intercept Apple Maps links, while on desktop Google Maps in the browser is the go-to. Pick one format and every other platform breaks.
 
-Building the detection into each project adds complexity. Often a plain link to copy or share is all that's needed.
+Building detection into each project adds complexity — often a plain link is all you need.
 
 ## The fix
 
-A single URL that handles the detection. Add `?q=` with a place name, coordinates, or a search query — done.
+One URL that handles detection. Add `?q=` with a place, coordinates, or a query — done.
 
 ```
 https://map.rbt.no/?q=Hornindalsvatnet

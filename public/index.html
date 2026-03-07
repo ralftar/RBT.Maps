@@ -301,12 +301,12 @@
     <div class="card">
       <h2>🤯 The problem</h2>
       <p>There is no standard for opening a map location natively. Android uses <code style="font-size:0.85em;background:var(--bg);padding:0.15em 0.4em;border-radius:4px">geo:</code> intents, iOS and macOS intercept <strong>Apple Maps</strong> links, while on desktop <strong>Google Maps</strong> in the browser is the go-to. Pick one format and every other platform breaks.</p>
-      <p>Building the detection into each project adds complexity. Often a plain link to copy or share is all that's needed.</p>
+      <p>Building detection into each project adds complexity — often a plain link is all you need.</p>
     </div>
 
     <div class="card">
       <h2>🔗 The fix</h2>
-      <p>A single URL that handles the detection. Add <strong>?q=</strong> with a place name, coordinates, or a search query — done.</p>
+      <p>One URL that handles detection. Add <strong>?q=</strong> with a place, coordinates, or a query — done.</p>
       <div class="url-box">
         <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Hornindalsvatnet</span>
         <button class="copy-btn" onclick="copyUrl(this)">Copy</button>
