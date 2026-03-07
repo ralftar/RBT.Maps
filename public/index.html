@@ -243,6 +243,27 @@
 
     .try-form button:hover { opacity: 0.85; }
 
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.25rem;
+      background: #2d8a4e;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 9px;
+      text-decoration: none;
+      transition: opacity 150ms;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-muted {
+      background: var(--border);
+      color: var(--text);
+    }
+
     .footer {
       margin-top: 1rem;
       padding: 1rem 0 2rem;
@@ -250,12 +271,6 @@
       color: var(--muted);
       font-size: 0.9rem;
       font-weight: 300;
-    }
-
-    .footer a {
-      color: var(--text);
-      text-decoration: underline;
-      text-underline-offset: 2px;
     }
 
     .redirect-notice {
@@ -336,12 +351,16 @@
     <div class="card">
       <h2>🚀 Use it</h2>
       <p>Free to use anywhere. No sign-up, no API key.</p>
+      <p>Open source on GitHub — report issues, suggest features, or contribute.</p>
+      <a class="btn btn-muted" href="https://github.com/ralftar/rbt.map" target="_blank" rel="noopener">github.com/ralftar/rbt.map</a>
     </div>
 
     <div class="footer">
       No cookies, only essential technicalities and anonymized visitor stats.
-      <br /><br />
-      By the courtesy of <a href="https://rbt.no">rbt.no</a>.
+      <br /><br /><br />
+      By the courtesy of
+      <br />
+      <a class="btn btn-muted" href="https://rbt.no">rbt.no</a>
     </div>
   </div>
 
