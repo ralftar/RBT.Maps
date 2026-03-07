@@ -83,7 +83,7 @@
     }
 
     .container {
-      max-width: 640px;
+      max-width: 800px;
       width: 100%;
       padding: 3rem 2rem 2rem;
     }
@@ -281,7 +281,7 @@
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 800px) {
       .container { padding-left: 0; padding-right: 0; }
       .logo, .tagline { padding-left: 1.75rem; }
       .card { border-radius: 0; border-left: none; border-right: none; }
@@ -308,7 +308,7 @@
       <h2>🔗 The fix</h2>
       <p>A single URL that handles the detection. Add <strong>?q=</strong> with a place name, coordinates, or a search query — done.</p>
       <div class="url-box">
-        <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Eiffel+Tower,+Paris</span>
+        <span class="domain">map.rbt.no/</span><span class="param">?q=</span><span class="value">Hornindalsvatnet</span>
         <button class="copy-btn" onclick="copyUrl(this)">Copy</button>
       </div>
     </div>
@@ -328,7 +328,7 @@
       <h2>🧪 Try it</h2>
       <p>Enter a place name or address and hit go.</p>
       <form class="try-form" onsubmit="tryNav(event)">
-        <input type="text" id="tryInput" placeholder="Eiffel Tower, Paris" autocomplete="off" />
+        <input type="text" id="tryInput" placeholder="Hornindalsvatnet" autocomplete="off" />
         <button type="submit">Open</button>
       </form>
     </div>
@@ -352,6 +352,17 @@
 
 
   <script>
+    // Expire leftover tracking cookies from previous analytics tools.
+    // _g*: Google Analytics, _fb*: Facebook Pixel, _hj*: Hotjar,
+    // _hp*: Heap, __utm*: Urchin/UTM, __hs*: HubSpot.
+    // Safe to remove once legacy cookies have expired (2026+).
+    document.cookie.split(';').forEach(function (c) {
+      var name = c.split('=')[0].trim();
+      if (/^(_g|_fb|_hj|_hp|__utm|__hs)/.test(name)) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      }
+    });
+
     (function () {
       const params = new URLSearchParams(location.search);
       const q = params.get('q');
@@ -416,12 +427,12 @@
 
     function tryNav(e) {
       e.preventDefault();
-      const val = document.getElementById('tryInput').value.trim() || 'Eiffel Tower, Paris';
+      const val = document.getElementById('tryInput').value.trim() || 'Hornindalsvatnet';
       window.open('?q=' + encodeURIComponent(val), '_blank');
     }
 
     function copyUrl(btn) {
-      navigator.clipboard.writeText('https://map.rbt.no/?q=Eiffel+Tower,+Paris');
+      navigator.clipboard.writeText('https://map.rbt.no/?q=Hornindalsvatnet');
       btn.textContent = 'Copied';
       setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
     }

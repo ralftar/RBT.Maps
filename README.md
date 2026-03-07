@@ -13,7 +13,7 @@ Building the detection into each project adds complexity. Often a plain link to 
 A single URL that handles the detection. Add `?q=` with a place name, coordinates, or a search query — done.
 
 ```
-https://map.rbt.no/?q=Eiffel+Tower,+Paris
+https://map.rbt.no/?q=Hornindalsvatnet
 ```
 
 ### Platform behavior
@@ -28,7 +28,7 @@ https://map.rbt.no/?q=Eiffel+Tower,+Paris
 ### Examples
 
 ```
-https://map.rbt.no/?q=Eiffel+Tower,+Paris
+https://map.rbt.no/?q=Hornindalsvatnet
 https://map.rbt.no/?q=59.9139,10.7522
 https://map.rbt.no/?q=pizza+oslo
 ```
