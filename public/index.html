@@ -8,8 +8,7 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)" />
   <title>maps.rbt.no | universal map link for every device</title>
-  <meta name="description" content="Universal map redirect service. One URL that opens Google Maps, Apple Maps, or the native maps app on any device. Cross-platform map link for Android, iOS, macOS, and desktop. Free, open, no API key. Replaces maps.apple.com and maps.app.goo.gl." />
-  <meta name="keywords" content="universal map link, cross-platform map redirect, open maps app, open map link natively, Google Maps redirect, Apple Maps link, geo intent, map URL redirect, maps.apple.com alternative, maps.app.goo.gl replacement, map deep link, native map link, map redirect service, open maps from website" />
+  <meta name="description" content="Universal map redirect service. Open the native maps app from a single URL. Share one link that opens Apple Maps on iPhone, the native maps app on Android, or Google Maps on desktop — perfect for QR codes, SMS, email, and chat. Free, open-source. No geo: URI headaches, no platform-specific code needed." />
   <link rel="canonical" href="https://maps.rbt.no/" />
   <link rel="icon" href="/favicon.ico" sizes="48x48" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -35,7 +34,7 @@
     "@type": "WebApplication",
     "name": "maps.rbt.no",
     "url": "https://maps.rbt.no/",
-    "description": "Universal map redirect service. One URL that opens Google Maps, Apple Maps, or the native maps app on any device. Cross-platform map deep link for Android, iOS, macOS, and desktop.",
+    "description": "Open the native maps app from a single URL. One link that opens Apple Maps on iPhone, the native maps app on Android, or Google Maps on desktop. Free, open-source cross-platform map redirect for QR codes, SMS, email, and chat.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -348,13 +347,13 @@
 
     <div class="card">
       <h2>🤯 The problem</h2>
-      <p>There is no standard for opening a map location natively. Android uses <code class="inline">geo:</code> intents, iOS and macOS intercept <strong>Apple Maps</strong> links, while on desktop <strong>Google Maps</strong> in the browser is the go-to. Pick one format and every other platform breaks.</p>
-      <p>Building differentiation into each project adds complexity — often a plain link is all you need.</p>
+      <p>There is no universal map link. Android uses <code class="inline">geo:</code> intents, iOS and macOS intercept <strong>Apple Maps</strong> links, while on desktop <strong>Google Maps</strong> in the browser is the go-to. Pick one format and every other platform breaks — whether you're sharing via QR code, SMS, email, or chat.</p>
+      <p>No single URL scheme opens the native maps app everywhere. Building platform detection into each project adds complexity — often a shareable link is all you need.</p>
     </div>
 
     <div class="card">
       <h2>🔗 The fix</h2>
-      <p>One URL that handles detection. Add <strong>?q=</strong> with a place, coordinates, or a query — done.</p>
+      <p>One cross-platform map link that opens the right app. Add <strong>?q=</strong> with a place name, address, or coordinates — done. Share it anywhere.</p>
       <div class="url-box">
         <span class="domain">maps.rbt.no/</span><span class="param">?q=</span><span class="value">Hornindalsvatnet</span>
         <button class="copy-btn" onclick="copyUrl(this)">Copy</button>
@@ -389,7 +388,7 @@
 
     <div class="card">
       <h2>🚀 Use it</h2>
-      <p>Free to use anywhere. No sign-up, no API key.</p>
+      <p>Free to use anywhere — in QR codes, SMS, email, chat, websites, or apps. No sign-up, no API key. A hosted alternative to writing your own platform-specific map link code.</p>
       <p>Open source on GitHub — report issues, suggest features, or contribute.</p>
       <a class="btn btn-muted" href="https://github.com/ralftar/RBT.Maps" target="_blank" rel="noopener">github.com/ralftar/RBT.Maps</a>
     </div>
