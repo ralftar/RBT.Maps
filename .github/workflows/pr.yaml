@@ -1,0 +1,13 @@
+name: PR
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    uses: ralftar/RBT.Sjef/.github/workflows/shared-check-static.yaml@ralftar/shared-checks
+    with:
+      directory: public
