@@ -1,6 +1,19 @@
 version: 2
+
+# Security updates only: a limit of 0 turns off version updates, while
+# security updates have their own limit. Minor and patch fixes arrive as one
+# pull request per ecosystem and folder.
+
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: weekly
+      timezone: Europe/Oslo
+      time: "08:00"
+    groups:
+      github-actions-security:
+        applies-to: security-updates
+        update-types: [minor, patch]
+    open-pull-requests-limit: 0
